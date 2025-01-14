@@ -127,3 +127,32 @@ populateTable(orders); // Populate with all orders initially
 
 // Initialize Validation on Page Load
 window.onload = () => validateDateRange();
+function adjustInputBehavior() {
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+    const isMobile = window.innerWidth <= 768; // Detect mobile view
+
+    if (isMobile) {
+        // Mobile: Use placeholder and custom type toggle
+        startDateInput.setAttribute('type', 'text');
+        startDateInput.setAttribute('onfocus', "(this.type='date')");
+        startDateInput.setAttribute('onblur', "(this.type='text')");
+
+        endDateInput.setAttribute('type', 'text');
+        endDateInput.setAttribute('onfocus', "(this.type='date')");
+        endDateInput.setAttribute('onblur', "(this.type='text')");
+    } else {
+        // Desktop: Default to date input
+        startDateInput.setAttribute('type', 'date');
+        startDateInput.removeAttribute('onfocus');
+        startDateInput.removeAttribute('onblur');
+
+        endDateInput.setAttribute('type', 'date');
+        endDateInput.removeAttribute('onfocus');
+        endDateInput.removeAttribute('onblur');
+    }
+}
+
+// Call on page load and on window resize
+window.onload = adjustInputBehavior;
+window.onresize = adjustInputBehavior;

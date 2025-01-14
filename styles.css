@@ -80,23 +80,30 @@ h1 {
     }
 }
 
-/* General Input Styling */
+/* Default Input Styling for Desktop */
 .date-input {
-    appearance: none; /* Disable native styles */
-    -webkit-appearance: none; /* For Safari */
-    -moz-appearance: none; /* For Firefox */
+    appearance: auto; /* Use native behavior by default */
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
     font-family: inherit;
-    color: #555;
-}
-
-/* Placeholder Styling */
-.date-input::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-/* Ensure consistent padding */
-.date-input {
     padding: 0.5rem;
 }
+
+/* Custom Placeholder Styling for Mobile */
+@media (max-width: 768px) {
+    .date-input {
+        appearance: none; /* Disable native picker for consistency */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        font-family: inherit;
+        color: #555;
+    }
+
+    .date-input::placeholder {
+        color: #aaa;
+        font-style: italic;
+    }
+}
+
+
 
