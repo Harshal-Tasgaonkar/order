@@ -31,18 +31,25 @@ function populateTable(filteredOrders) {
         return;
     }
     noResults.classList.add('d-none');
+
+    const fragment = document.createDocumentFragment(); // Improve performance
     filteredOrders.forEach(order => {
-        const row = `
-            <tr>
-                <td>${order.id}</td>
-                <td>${order.date}</td>
-                <td>${order.status}</td>
-                <td>${order.total}</td>
-                <td><button class="btn btn-primary btn-sm" onclick="viewDetails('${order.id}')">View Details</button></td>
-            </tr>
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${order.id}</td>
+            <td>${order.date}</td>
+            <td>${order.status}</td>
+            <td>${order.total}</td>
+            <td>
+                <button 
+                    class="btn btn-primary btn-sm" 
+                    onclick="viewDetails('${order.id}')">View Details</button>
+            </td>
         `;
-        orderTable.insertAdjacentHTML('beforeend', row);
+        fragment.appendChild(row);
     });
+
+    orderTable.appendChild(fragment); // Append all rows at once
 }
 
 // Filter Orders
@@ -51,7 +58,7 @@ function filterOrders() {
     const endDate = document.getElementById('endDate').value;
     const status = document.getElementById('orderStatus').value;
 
-    let filteredOrders = orders;
+    let filteredOrders = [...orders];
 
     if (startDate) {
         filteredOrders = filteredOrders.filter(order => new Date(order.date) >= new Date(startDate));
@@ -69,60 +76,54 @@ function filterOrders() {
 // View Order Details
 function viewDetails(orderId) {
     const order = orders.find(o => o.id === orderId);
-    if (!order) return;
+    if (!order) {
+        console.error(`Order ID ${orderId} not found.`);
+        return;
+    }
 
-    document.getElementById('modalOrderId').textContent = order.id;
-    document.getElementById('modalItems').textContent = order.items;
-    document.getElementById('modalPayment').textContent = order.payment;
-    document.getElementById('modalAddress').textContent = order.address;
-    document.getElementById('modalTotalItems').textContent = order.items.split(', ').length;
+    // Construct query parameters with order data
+    const queryParams = new URLSearchParams({
+        id: order.id,
+        items: order.items,
+        payment: order.payment,
+        address: order.address,
+        totalItems: order.items.split(', ').length,
+        totalCost: order.total,
+    });
 
-    const modal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
-    modal.show();
+    // Navigate to the detail page
+    window.location.href = `view-detail.html?${queryParams.toString()}`;
 }
 
-// Initialize Table
-document.getElementById('startDate').addEventListener('change', filterOrders);
-document.getElementById('endDate').addEventListener('change', filterOrders);
-document.getElementById('orderStatus').addEventListener('change', filterOrders);
-
-populateTable(orders); // Initial population
-
-
-// Function to validate and disable end date selection
+// Validate Date Range
 function validateDateRange() {
     const startDate = document.getElementById('startDate').value;
     const endDateInput = document.getElementById('endDate');
-    
-    if (startDate) {
-        // Disable the end date input if the start date is set
-        endDateInput.disabled = false;  // Enable end date input
 
-        // If the end date is earlier than the start date, disable it and show as greyed out
+    if (startDate) {
+        endDateInput.disabled = false;
+
         if (endDateInput.value && new Date(endDateInput.value) < new Date(startDate)) {
-            endDateInput.value = '';  // Clear the end date if it's invalid
+            endDateInput.value = ''; // Clear invalid end date
         }
 
-        // Set the min attribute to prevent selecting earlier dates
-        endDateInput.setAttribute('min', startDate);
+        endDateInput.setAttribute('min', startDate); // Prevent earlier dates
     } else {
-        // Disable the end date input if no start date is selected
         endDateInput.disabled = true;
-        endDateInput.value = '';  // Clear the end date if no start date
+        endDateInput.value = ''; // Clear end date if no start date
     }
 }
 
-// Add event listeners to validate when the user changes dates
-document.getElementById('startDate').addEventListener('change', function() {
-    validateDateRange(); // Validate when start date changes
+// Event Listeners for Filtering and Validation
+document.getElementById('startDate').addEventListener('change', () => {
+    validateDateRange();
+    filterOrders();
 });
+document.getElementById('endDate').addEventListener('change', filterOrders);
+document.getElementById('orderStatus').addEventListener('change', filterOrders);
 
-document.getElementById('endDate').addEventListener('change', function() {
-    validateDateRange(); // Validate when end date changes
-});
+// Initialize Table
+populateTable(orders); // Populate with all orders initially
 
-// Initialize validation on page load
-window.onload = function() {
-    validateDateRange(); // Ensure end date is correctly set based on the start date
-};
-
+// Initialize Validation on Page Load
+window.onload = () => validateDateRange();
