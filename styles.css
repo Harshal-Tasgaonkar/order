@@ -80,10 +80,23 @@ h1 {
     }
 }
 
-/* Ensure consistent date picker appearance */
-input[type="date"] {
-    appearance: none;
-    -webkit-appearance: none; /* Remove default styles */
-    -moz-appearance: none;
-    text-align: left;
+/* General Input Styling */
+.date-input {
+    appearance: none; /* Disable native styles */
+    -webkit-appearance: none; /* For Safari */
+    -moz-appearance: none; /* For Firefox */
+    font-family: inherit;
+    color: #555;
 }
+
+/* Placeholder Styling */
+.date-input::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Ensure consistent padding */
+.date-input {
+    padding: 0.5rem;
+}
+
