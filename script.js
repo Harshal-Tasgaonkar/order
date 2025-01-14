@@ -125,3 +125,20 @@ document.getElementById('endDate').addEventListener('change', function() {
 window.onload = function() {
     validateDateRange(); // Ensure end date is correctly set based on the start date
 };
+
+function setDatePlaceholders() {
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
+
+    startDateInput.placeholder = 'YYYY-MM-DD'; // Set custom placeholder
+    endDateInput.placeholder = 'YYYY-MM-DD'; // Set custom placeholder
+}
+
+// Call the function on page load
+window.onload = function() {
+    setDatePlaceholders(); // Set placeholders when the page loads
+    validateDateRange(); // Ensure end date is correctly set based on the start date
+};
