@@ -80,3 +80,10 @@ h1 {
     }
 }
 
+/* Ensure consistent date picker appearance */
+input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none; /* Remove default styles */
+    -moz-appearance: none;
+    text-align: left;
+}
