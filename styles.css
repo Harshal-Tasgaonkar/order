@@ -80,23 +80,3 @@ h1 {
     }
 }
 
-/* Ensure date inputs are visible and properly styled */
-input[type="date"] {
-    box-sizing: border-box; /* Include padding and border in width */
-    font-size: 1rem; /* Adjust font size for better visibility */
-    padding: 0.5rem; /* Adjust padding for clickability */
-    width: 100%; /* Ensure inputs take the full available width in mobile */
-    appearance: none; /* Remove native styles to ensure cross-browser consistency */
-}
-
-/* Adjust for smaller screens */
-@media (max-width: 768px) {
-    input[type="date"] {
-        font-size: 0.9rem; /* Slightly smaller font size for smaller devices */
-    }
-
-    .d-flex {
-        flex-direction: column; /* Stack date inputs vertically on mobile */
-        gap: 0.5rem; /* Add space between inputs */
-    }
-}
