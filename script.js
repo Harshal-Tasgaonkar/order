@@ -130,9 +130,7 @@ function setDatePlaceholders() {
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
 
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0]; // Format as YYYY-MM-DD
-
+    
     startDateInput.placeholder = 'YYYY-MM-DD'; // Set custom placeholder
     endDateInput.placeholder = 'YYYY-MM-DD'; // Set custom placeholder
 }
